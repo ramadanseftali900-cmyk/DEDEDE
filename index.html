@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
@@ -234,21 +234,15 @@ function herSeyiGoster() {
   if(bottomImg) {
     var container = bottomImg.parentElement;
     if(container && container.parentElement) {
-      // Alt görsel URL'si kontrol et
-      var hasValidSrc = bottomImg.src && 
-                       bottomImg.src.trim() !== '' && 
-                       bottomImg.src !== window.location.href &&
-                       !bottomImg.src.endsWith('/') &&
-                       bottomImg.src.indexOf('http') === 0;
-      
-      if(hasValidSrc) {
+      // Alt görsel URL'si varsa göster
+      if(bottomImg.src && bottomImg.src.trim() !== '' && bottomImg.src !== window.location.href) {
         container.parentElement.style.display = 'block';
         container.style.display = 'block';
         bottomImg.style.display = 'block';
-        console.log('✅ Alt görsel gösterildi:', bottomImg.src);
+        console.log('✅ Alt görsel gösterildi');
       } else {
+        console.log('⚠️ Alt görsel URL boş, gizleniyor');
         container.parentElement.style.display = 'none';
-        console.log('⚠️ Alt görsel gizlendi - URL:', bottomImg.src);
       }
     }
   }
@@ -285,13 +279,13 @@ function herSeyiGoster() {
   }
 }
 
-// GÜVENLİK: Görseller yüklenmese bile 2 saniye sonra her şeyi göster
+// GÜVENLİK: Görseller yüklenmese bile 3 saniye sonra her şeyi göster
 setTimeout(function() {
   if(!formGosterildi) {
-    console.log('⏰ Timeout: Her şey gösteriliyor (2 saniye geçti)');
+    console.log('⏰ Timeout: Her şey gösteriliyor (3 saniye geçti)');
     herSeyiGoster();
   }
-}, 2000);
+}, 3000);
 </script>
 <div class="formWrapper" style="position:relative;">
 <label class="formLabel" style="margin-top:0">Ödeme Yöntemi:</label>
@@ -582,42 +576,36 @@ checkPos();
         var gizli = localStorage.getItem(getSiteKey('politikalar_gizli')) === 'true';
         var politikaDiv = document.getElementById('politikaLinksDiv');
         
-        console.log('🔍 Politika kontrol - Gizli:', gizli, 'Mobil:', window.innerWidth <= 768);
-        
         if (politikaDiv) {
             if (gizli) {
                 politikaDiv.style.display = 'none';
-                politikaDiv.style.visibility = 'hidden';
-                console.log('🙈 Politikalar gizlendi');
             } else {
-                politikaDiv.style.display = 'block';
-                politikaDiv.style.visibility = 'visible';
-                console.log('👁️ Politikalar gösterildi');
+                // Mobilde her zaman göster, desktop'ta form gösterildiyse göster
+                if (window.innerWidth <= 768) {
+                    politikaDiv.style.display = 'block';
+                } else {
+                    var formWrapper = document.querySelector('.formWrapper');
+                    if (formWrapper && formWrapper.style.display !== 'none') {
+                        politikaDiv.style.display = 'block';
+                    }
+                }
             }
         }
     }
 
-    // Sayfa yüklenince hemen kontrol et
-    politikaGizliKontrol();
-    
-    // DOM hazır olunca tekrar kontrol et
+    // Sayfa yüklenince kontrol et
     document.addEventListener('DOMContentLoaded', politikaGizliKontrol);
     
     // Form gösterildikten sonra da kontrol et
-    setTimeout(politikaGizliKontrol, 500);
     setTimeout(politikaGizliKontrol, 1000);
     setTimeout(politikaGizliKontrol, 3000);
     
     // Storage değişikliklerini dinle (diğer sekmelerden değişiklik olursa)
     window.addEventListener('storage', function(e) {
         if (e.key && e.key.includes('politikalar_gizli')) {
-            console.log('📡 Storage değişti, politika kontrol ediliyor');
             politikaGizliKontrol();
         }
     });
-    
-    // Resize olunca da kontrol et
-    window.addEventListener('resize', politikaGizliKontrol);
 })();
 </script>
 

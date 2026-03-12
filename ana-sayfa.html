@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Site</title>
-
-<script>
-// SITE_ID'yi global olarak tanımla (Firebase için) - Ürün sayfalarıyla aynı
-var SITE_ID = 'www_kargonburada_online';
-</script>
-
 <style>
 html,body{margin:0;padding:0;overflow-y:auto;overflow-x:hidden}
 /* Scrollbar'ı gizle ama kaydırmaya izin ver */
@@ -69,7 +63,7 @@ body{-ms-overflow-style:none;scrollbar-width:none}
 <button class="drawerBtn" style="background:#1B5E20" onclick="guvenliGit('siparis-takibi.html')">Siparişler</button>
 <button class="drawerBtn" style="background:#2C3E50" onclick="guvenliGit('otomasyon.html')">Otomasyon</button>
 <button class="drawerBtn" style="background:#e94560" onclick="guvenliGit('ramco.html')">🤖 AI</button>
-<button class="drawerBtn" style="background:#6f42c1" onclick="guvenliGit('politikalar.html')">📋 Politika</button>
+<!-- POLİTİKA BUTONU KALDIRILDI -->
 <button class="drawerBtn" style="background:#667eea" onclick="guvenliGit('dokumantasyon.html')">📚 Rehber</button>
 <button class="drawerBtn" style="background:#28a745" onclick="guvenliGit('ses-yoneticisi.html')">🔊 Ses</button>
 <button class="drawerBtn" style="background:#17a2b8" onclick="guvenliGit('gorsel-yukleyici-grid.html')">🖼️ Görsel</button>
@@ -97,21 +91,7 @@ body{-ms-overflow-style:none;scrollbar-width:none}
 <div id="urlDrawer">
 <div class="urlDrawerHeader">📋 ÜRÜN URL'LERİ</div>
 <div class="urlDrawerContent">
-<!-- WHATSAPP NUMARASI BÖLÜMÜ -->
-<div style="background:rgba(37,211,102,0.1);border:2px solid #25d366;border-radius:10px;padding:15px;margin-bottom:20px">
-<div style="color:#25d366;font-weight:bold;font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px">💬 WhatsApp Numarası</div>
-<input type="tel" id="whatsappNumara" placeholder="5XX XXX XX XX" style="width:calc(100% - 22px);padding:10px;border:1px solid #25d366;border-radius:8px;background:rgba(0,0,0,0.3);color:#fff;font-size:14px;margin-bottom:10px;box-sizing:border-box" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-<div style="display:flex;gap:8px">
-<button onclick="whatsappKaydet()" style="flex:1;background:#25d366;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:12px">💾 KAYDET</button>
-<button onclick="whatsappSil()" style="flex:1;background:#dc3545;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer;font-weight:bold;font-size:12px">🗑️ SİL</button>
-</div>
-<!-- WHATSAPP GİZLE/GÖSTER -->
-<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(37,211,102,0.3)">
-<span style="color:#25d366;font-size:12px;font-weight:bold">👁️ Butonu Göster/Gizle</span>
-<div id="whatsappToggle" class="toggleSwitch acik" onclick="whatsappGizleToggle()" style="width:40px;height:22px;background:#28a745;border-radius:11px;position:relative;cursor:pointer;transition:background 0.3s"><div id="whatsappToggleKnob" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:all 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3)"></div></div>
-</div>
-<div id="whatsappDurum" style="margin-top:8px;font-size:11px;color:#888;text-align:center"></div>
-</div>
+<!-- WHATSAPP KONTROL BÖLÜMÜ KALDIRILDI -->
 <!-- ADMİN URL'LERİ (SENİN İÇİN) -->
 <div style="background:#e94560;color:#fff;padding:10px;margin:20px 0 10px 0;border-radius:8px;font-weight:bold;text-align:center;">🔧 ADMİN URL (SENİN İÇİN)</div>
 <div class="urlItem">
@@ -332,102 +312,7 @@ function getAnaSayfaKey(key) {
   return siteId + '_' + key;
 }
 
-// WhatsApp numara kaydet/sil
-function whatsappKaydet() {
-  var numara = document.getElementById('whatsappNumara').value.trim();
-  if(numara) {
-    // Sadece rakamları al
-    numara = numara.replace(/\D/g, '');
-    // Türkiye kodu ekle
-    if(numara.startsWith('0')) numara = '90' + numara.substring(1);
-    else if(!numara.startsWith('90')) numara = '90' + numara;
-    
-    localStorage.setItem(getAnaSayfaKey('whatsapp_numara'), numara);
-    document.getElementById('whatsappDurum').innerHTML = '✅ Kaydedildi: +' + numara;
-    document.getElementById('whatsappDurum').style.color = '#25d366';
-  } else {
-    document.getElementById('whatsappDurum').innerHTML = '⚠️ Numara girin!';
-    document.getElementById('whatsappDurum').style.color = '#ffc107';
-  }
-}
-
-function whatsappSil() {
-  localStorage.removeItem(getAnaSayfaKey('whatsapp_numara'));
-  document.getElementById('whatsappNumara').value = '';
-  document.getElementById('whatsappDurum').innerHTML = '🗑️ Numara silindi';
-  document.getElementById('whatsappDurum').style.color = '#dc3545';
-}
-
-function whatsappYukle() {
-  var numara = localStorage.getItem(getAnaSayfaKey('whatsapp_numara'));
-  if(numara) {
-    document.getElementById('whatsappNumara').value = numara;
-    document.getElementById('whatsappDurum').innerHTML = '✅ Kayıtlı: +' + numara;
-    document.getElementById('whatsappDurum').style.color = '#25d366';
-  }
-  // WhatsApp gizle durumunu yükle - Firebase öncelikli
-  if (database) {
-    database.ref(SITE_ID + '/ayarlar/whatsapp_gizli').once('value').then(function(snapshot) {
-      var gizli = snapshot.val() === true;
-      whatsappToggleGuncelle(gizli);
-    }).catch(function(err) {
-      // Firebase hatası, localStorage'dan yükle
-      var gizli = localStorage.getItem(getAnaSayfaKey('whatsapp_gizli')) === 'true';
-      whatsappToggleGuncelle(gizli);
-    });
-  } else {
-    // Firebase yok, localStorage'dan yükle
-    var gizli = localStorage.getItem(getAnaSayfaKey('whatsapp_gizli')) === 'true';
-    whatsappToggleGuncelle(gizli);
-  }
-}
-
-// WhatsApp toggle görünümünü güncelle
-function whatsappToggleGuncelle(gizli) {
-  var toggle = document.getElementById('whatsappToggle');
-  var knob = document.getElementById('whatsappToggleKnob');
-  if(toggle && knob) {
-    if(gizli) {
-      toggle.classList.remove('acik');
-      toggle.style.background = '#dc3545';
-      knob.style.right = 'auto';
-      knob.style.left = '2px';
-      document.getElementById('whatsappDurum').innerHTML = '🚫 WhatsApp butonu GİZLİ';
-      document.getElementById('whatsappDurum').style.color = '#dc3545';
-    } else {
-      toggle.classList.add('acik');
-      toggle.style.background = '#28a745';
-      knob.style.left = 'auto';
-      knob.style.right = '2px';
-      document.getElementById('whatsappDurum').innerHTML = '👁️ WhatsApp butonu GÖRÜNEBİLİR';
-      document.getElementById('whatsappDurum').style.color = '#28a745';
-    }
-  }
-}
-
-function whatsappGizleToggle() {
-  var gizli = localStorage.getItem(getAnaSayfaKey('whatsapp_gizli')) === 'true';
-  
-  if(gizli) {
-    // Göster
-    localStorage.setItem(getAnaSayfaKey('whatsapp_gizli'), 'false');
-    whatsappToggleGuncelle(false);
-    
-    // Firebase'e kaydet
-    if (database) {
-      database.ref(SITE_ID + '/ayarlar/whatsapp_gizli').set(false);
-    }
-  } else {
-    // Gizle
-    localStorage.setItem(getAnaSayfaKey('whatsapp_gizli'), 'true');
-    whatsappToggleGuncelle(true);
-    
-    // Firebase'e kaydet
-    if (database) {
-      database.ref(SITE_ID + '/ayarlar/whatsapp_gizli').set(true);
-    }
-  }
-}
+// WHATSAPP FONKSİYONLARI KALDIRILDI
 
 function urllerGuncelle() {
   var domain = window.location.hostname;
@@ -447,7 +332,7 @@ function urllerGuncelle() {
 }
 
 window.addEventListener('load', function() {
-  whatsappYukle();
+  // WHATSAPP YÜKLEME KALDIRILDI
   urllerGuncelle();
 });
 
@@ -610,10 +495,7 @@ function sifreKapatEski() {
 <span>🛒 Sipariş Ver Butonu</span>
 <span id="orderBtnClicks" style="font-size:24px;font-weight:bold;color:#28a745">0</span>
 </div>
-<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(37,211,102,0.2);padding:15px;border-radius:10px;border-left:4px solid #25d366">
-<span>💬 WhatsApp Tıklaması</span>
-<span id="whatsappClicks" style="font-size:24px;font-weight:bold;color:#25d366">0</span>
-</div>
+<!-- WHATSAPP TIKLAMA ANALİZİ KALDIRILDI -->
 </div>
 </div>
 
@@ -1157,10 +1039,10 @@ function anaSayfaFirebaseBaslat() {
     var pageStatsEl = document.getElementById('pageStats'); if(pageStatsEl) pageStatsEl.innerHTML = pageStatsHtml;
     // =====================================================================
     
-    // WhatsApp tıklama sayısı
-    var whatsappTiklama = istat.whatsappTiklama || 0;
-    var whatsappClicksEl = document.getElementById('whatsappClicks');
-    if(whatsappClicksEl) whatsappClicksEl.textContent = whatsappTiklama;
+    // WhatsApp tıklama sayısı - KALDIRILDI
+    // var whatsappTiklama = istat.whatsappTiklama || 0;
+    // var whatsappClicksEl = document.getElementById('whatsappClicks');
+    // if(whatsappClicksEl) whatsappClicksEl.textContent = whatsappTiklama;
     
     // Tahmini kar (%30)
     var estimatedProfitEl = document.getElementById('estimatedProfit');
@@ -1481,7 +1363,7 @@ function anaSayfaFirebaseBaslat() {
     }
   });
   
-  // TIKLAMA ANALİZİ - Sipariş butonu (WhatsApp artık istatistikler tablosundan geliyor)
+  // TIKLAMA ANALİZİ - Sipariş butonu (WhatsApp takibi kaldırıldı)
   database.ref(SITE_ID + '/tiklamalar').on('value', function(snapshot) {
     var siparisBtn = 0;
     snapshot.forEach(function(child) { var data = child.val(); if(data && data.tarih === bugun) { if(data.tip === 'siparis_btn') siparisBtn++; } });
@@ -1960,7 +1842,7 @@ window.addEventListener('load', aylikTakvimiBagla);
 <div style="font-size:18px;font-weight:bold;margin-bottom:20px;display:flex;align-items:center;gap:10px">
 <span>📱</span> SOSYAL MEDYA
 </div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px">
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px">
 <div style="text-align:center;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);padding:20px;border-radius:10px;cursor:pointer" onclick="sosyalMedyaDuzenle('instagram')">
 <div style="font-size:30px">📸</div>
 <div style="font-size:20px;font-weight:bold" id="instaFollowers">0</div>
@@ -1971,11 +1853,7 @@ window.addEventListener('load', aylikTakvimiBagla);
 <div style="font-size:20px;font-weight:bold" id="tiktokFollowers">0</div>
 <div style="font-size:11px;opacity:0.8">Takipçi</div>
 </div>
-<div style="text-align:center;background:#25D366;padding:20px;border-radius:10px;cursor:pointer" onclick="sosyalMedyaDuzenle('whatsapp')">
-<div style="font-size:30px">💬</div>
-<div style="font-size:20px;font-weight:bold" id="whatsappMsgs">0</div>
-<div style="font-size:11px;opacity:0.8">Mesaj</div>
-</div>
+<!-- WHATSAPP SOSYAL MEDYA KALDIRILDI -->
 </div>
 </div>
 <script>
@@ -1987,15 +1865,15 @@ function sosyalMedyaBagla() {
     var data = snapshot.val() || {};
     var instaEl = document.getElementById('instaFollowers');
     var tiktokEl = document.getElementById('tiktokFollowers');
-    var whatsappEl = document.getElementById('whatsappMsgs');
+    var whatsappEl = document.getElementById('whatsappMsgs'); // KALDIRILDI
     
     if(instaEl) instaEl.textContent = (data.instagram || 0).toLocaleString('tr-TR');
     if(tiktokEl) tiktokEl.textContent = (data.tiktok || 0).toLocaleString('tr-TR');
-    if(whatsappEl) whatsappEl.textContent = (data.whatsapp || 0).toLocaleString('tr-TR');
+    // WhatsApp kaldırıldı: if(whatsappEl) whatsappEl.textContent = (data.whatsapp || 0).toLocaleString('tr-TR');
   });
 }
 function sosyalMedyaDuzenle(platform) {
-  var mevcutDeger = document.getElementById(platform === 'instagram' ? 'instaFollowers' : (platform === 'tiktok' ? 'tiktokFollowers' : 'whatsappMsgs')).textContent;
+  var mevcutDeger = document.getElementById(platform === 'instagram' ? 'instaFollowers' : 'tiktokFollowers').textContent;
   var yeniDeger = prompt(platform.toUpperCase() + ' sayısını girin:', mevcutDeger.replace(/\./g,''));
   if(yeniDeger !== null && !isNaN(yeniDeger)) {
     database.ref(SITE_ID + '/sosyalMedya/' + platform).set(parseInt(yeniDeger));
@@ -2216,10 +2094,7 @@ window.addEventListener('load', saatlikGrafigiBagla);
 <h3 style="color:#95a5a6;margin:0 0 10px;font-size:16px">⚙️ OTOMASYON</h3>
 <p style="color:#aaa;font-size:13px;line-height:1.6;margin:0">Otomatik işlemler tanımlayın. Yeni sipariş bildirimi, stok uyarısı, günlük rapor gönderimi gibi otomasyonlar kurun.</p>
 </div>
-<div style="margin-bottom:20px;background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;border-left:4px solid #6f42c1">
-<h3 style="color:#6f42c1;margin:0 0 10px;font-size:16px">📋 POLİTİKALAR</h3>
-<p style="color:#aaa;font-size:13px;line-height:1.6;margin:0">Her ürün için ayrı politikalar tanımlayın:<br>• Gizlilik Politikası<br>• Ön Bilgilendirme Formu<br>• İptal ve İade Politikası<br>• Teslimat Koşulları<br>• İletişim Bilgileri<br>Müşteriler ürün sayfasının altındaki linklerden okuyabilir.</p>
-</div>
+<!-- POLİTİKALAR AÇIKLAMASI KALDIRILDI -->
 <div style="margin-bottom:20px;background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;border-left:4px solid #e94560">
 <h3 style="color:#e94560;margin:0 0 10px;font-size:16px">🤖 GARİBAN (Yapay Zeka)</h3>
 <p style="color:#aaa;font-size:13px;line-height:1.6;margin:0">Sağ alttaki kırmızı yüze tıklayın. Sesli veya yazılı komut verin. Analiz, özet, motivasyon ve daha fazlası!</p>
@@ -2325,18 +2200,17 @@ window.addEventListener('load', saatlikGrafigiBagla);
 
 <!-- 6. POLİTİKALAR -->
 <div style="margin-bottom:20px;background:rgba(0,0,0,0.3);border-radius:12px;padding:15px;border-left:4px solid #6f42c1">
-<h3 style="color:#6f42c1;margin:0 0 15px;font-size:16px">📋 6. POLİTİKALAR AYARLAMA</h3>
+<!-- POLİTİKALAR AYARLAMA REHBERİ KALDIRILDI -->
 <p style="color:#aaa;font-size:13px;line-height:1.8;margin:0">
-<strong style="color:#fff">Politika Ekleme:</strong><br>
-• Üst çekmeceden Politikalar sayfasına gidin<br>
+<!-- POLİTİKA AÇIKLAMA KALDIRILDI -->
 • Üstten ürün seçin (ÜRÜN 1, ÜRÜN 2...)<br>
-• Soldan politika türünü seçin<br>
+<!-- POLİTİKA AÇIKLAMA KALDIRILDI -->
 • Metni yazın ve KAYDET'e tıklayın<br><br>
 <strong style="color:#fff">Emoji Kullanımı:</strong><br>
 • Textarea üstündeki emoji butonlarını kullanın<br>
 • Satır başlarına madde işaretleri ekleyin<br><br>
 <strong style="color:#fff">Müşteri Görünümü:</strong><br>
-• Ürün sayfasının altında politika linkleri görünür<br>
+<!-- POLİTİKA AÇIKLAMA KALDIRILDI -->
 • Tıklayınca popup açılır, başlık sabit kalır, içerik kayar
 </p>
 </div>
